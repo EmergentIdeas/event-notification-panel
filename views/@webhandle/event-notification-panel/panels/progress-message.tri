@@ -1,0 +1,27 @@
+<div class="notification __status__">
+	<div class="info">
+		<div class="top">
+			<span class="icon">
+				<span class="material-icons">__status::@webhandle/event-notification-panel/utils/iconForStatus__</span>
+			</span>
+			<span class="headline">
+				__headline__
+			</span>
+		</div>
+		__message??this::./message-holder__
+		<div class="progress">
+			<div class="numeric-holder">
+				<span class="numeric">__progressComplete__</span>%
+			</div>
+			<div class="bar">
+				<div class="made" style="margin-left: __progressComplete__%;"></div>
+			</div>
+		</div>
+	</div>
+	<div class="actions">
+		<span class="remove-notification material-icons">
+			close
+		</span>
+		__message??this::./expand-more__
+	</div>
+</div>

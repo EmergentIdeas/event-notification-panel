@@ -1,0 +1,143 @@
+@import "../node_modules/@dankolz/webhandle-admin-icons/less/admin-icon-setup";
+
+
+.webhandle-event-notifications {
+	@grey-box-outline: #eeeeee;
+	--grey-box-outline: @grey-box-outline;
+	--success-color: green;
+	--warning-color: orange;
+	--error-color: red;
+	--progress-bar-color: blue;
+	--trransition-time: .3s;
+
+	
+	.event-notification-view {
+		transition: opacity var(--trransition-time);
+		&.closed {
+			.info {
+				.message-holder {
+					max-height: 0;
+				}
+			}
+			.actions {
+				.expand-message {
+					display: block;
+				}
+			}
+		}
+	}
+	
+
+	.notification {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		padding: 10px 16px;
+		border: solid 1px var(--grey-box-outline);
+		border-radius: 4px;
+		
+		.info {
+			.top {
+				.icon {
+					position: relative;
+					display: inline-block;
+					padding: 5px 5px 2px 5px;
+					margin-right: 20px;
+					border-radius: 4px;
+					isolation: isolate;
+
+					&:before {
+						content: '';
+						position: absolute;
+						inset: 0;
+						z-index: -1;
+						opacity: 20%;
+						border-radius: 4px;
+					}
+
+					.material-icons {
+						font-size: 16px;
+					}
+				}
+				.headline {
+					font-weight: 600;
+				}
+			}
+			
+			.message-holder {
+				overflow: hidden;
+				transition: max-height var(--trransition-time);
+				max-height: 200px;
+				overflow: auto;
+			}
+			
+			.message {
+				margin-top: 10px;
+			}
+			.progress {
+				display: grid;
+				grid-template-columns: auto 1fr;
+				column-gap: 30px;
+				
+				.bar {
+					position: relative;
+					border: solid 1px var(--grey-box-outline);
+					border-radius: 4px;
+					overflow: hidden;
+					
+					.made {
+						position: absolute;
+						width: 100%;
+						background-color: var(--progress-bar-color);
+						top: 0;
+						bottom: 0;
+						left: -100%;
+						transition: margin-left var(--trransition-time);
+					}
+				}
+			}
+		}
+
+		.actions {
+			span {
+				display: block;
+				cursor: pointer;
+				font-size: 16px;
+			}
+			.expand-message {
+				display: none;
+			}
+		}	
+		
+		&.success {
+			.icon {
+				color: var(--success-color);
+				&:before {
+					background-color: var(--success-color);
+				}
+			}
+		}
+		&.warning {
+			.icon {
+				color: var(--warning-color);
+				&:before {
+					background-color: var(--warning-color);
+				}
+			}
+		}
+		&.error {
+			.icon {
+				color: var(--error-color);
+				&:before {
+					background-color: var(--error-color);
+				}
+			}
+		}
+		
+	}
+	
+	
+	.notification {
+		margin: 10px; 
+	}
+
+}
