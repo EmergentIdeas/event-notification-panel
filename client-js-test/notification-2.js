@@ -1,4 +1,4 @@
-import Notification from "../client-js/notification.js"
+import Notification from "../client-js/notification.mjs"
 
 export default new Notification({
 	status: 'performing'

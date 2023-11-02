@@ -12,15 +12,9 @@ module.exports = [{
 	entry: './client-js-test/pages.mjs',
 	mode: 'development',
 	"devtool": 'source-map',
-	experiments: {
-		outputModule: true,
-	},
 	output: {
 		filename: 'pages.js',
 		path: path.resolve(__dirname, 'public/js'),
-		library: {
-			type: 'module',
-		}
 	},
 	module: {
 		rules: [
@@ -38,21 +32,20 @@ module.exports = [{
 	],
 	stats: {
 		colors: true,
-		reasons: true
+		// reasons: true
 	},
 
 }
-/*
-,
+	,
 {
-	entry: './client-js/index.js',
+	entry: './client-js/index.mjs',
 	mode: 'production',
 	"devtool": 'source-map',
 	experiments: {
 		outputModule: true,
 	},
 	output: {
-		filename: 'index.js',
+		filename: 'event-notification-panel.js',
 		path: path.resolve(__dirname, 'public/js'),
 		library: {
 			type: 'module',
@@ -74,7 +67,8 @@ module.exports = [{
 	],
 	stats: {
 		colors: true,
-		reasons: true
+		// reasons: true
 	},
 
-}*/ ]
+}
+]

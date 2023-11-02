@@ -1,0 +1,9 @@
+
+		<div class="top">
+			<span class="icon">
+				<span class="material-icons">__status::@webhandle/event-notification-panel/utils/iconForStatus__</span>
+			</span>
+			<span class="headline">
+				__headline__
+			</span>
+		</div>

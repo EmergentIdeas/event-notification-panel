@@ -10,6 +10,7 @@
 	--progress-bar-color: blue;
 	--trransition-time: .3s;
 
+	overflow: auto;
 	
 	.event-notification-view {
 		transition: opacity var(--trransition-time);
@@ -20,8 +21,13 @@
 				}
 			}
 			.actions {
+				padding-left: 15px;
 				.expand-message {
 					display: block;
+				}
+				
+				& > * {
+					margin-bottom: 10px;
 				}
 			}
 		}
@@ -29,6 +35,7 @@
 	
 
 	.notification {
+		position: relative;
 		display: grid;
 		grid-template-columns: 1fr auto;
 		padding: 10px 16px;
@@ -81,8 +88,10 @@
 				.bar {
 					position: relative;
 					border: solid 1px var(--grey-box-outline);
-					border-radius: 4px;
+					border-radius: 12px;
 					overflow: hidden;
+					align-self: center;
+					height: 12px;
 					
 					.made {
 						position: absolute;
@@ -98,6 +107,7 @@
 		}
 
 		.actions {
+			z-index: 3;
 			span {
 				display: block;
 				cursor: pointer;
@@ -107,6 +117,24 @@
 				display: none;
 			}
 		}	
+
+		.cancel-mask {
+			position: absolute;
+			inset: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 2;
+			
+			&:before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				opacity: .4;
+				background-color: var(--grey-box-outline);
+				z-index: -1;
+			}
+		}
 		
 		&.success {
 			.icon {

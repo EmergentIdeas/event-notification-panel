@@ -1,5 +1,21 @@
 	
-<script type="text/javascript" type="module" src="/js/pages.js" async="async"></script>
+<script type="text/javascript" src="/js/pages.js" defer></script>
 
+<script type="module" async>
+	//import Notification from '/js/event-notification-panel.js'
+	import {Notification} from '/js/event-notification-panel.js'
+	// import '/js/event-notification-panel.js'
+	let i = 123
+	/*
+	eval('console.log("hi")')
+
+	import {default as go} from '/js/index.js'
+	go()
+	*/
+
+
+	
+</script>
+<div id="last-el"></div>
 
 </body></html>

@@ -1,13 +1,6 @@
 <div class="notification __status__">
 	<div class="info">
-		<div class="top">
-			<span class="icon">
-				<span class="material-icons">__status::@webhandle/event-notification-panel/utils/iconForStatus__</span>
-			</span>
-			<span class="headline">
-				__headline__
-			</span>
-		</div>
+		__::./notification-top__
 		__message??this::./message-holder__
 		<div class="progress">
 			<div class="numeric-holder">
@@ -19,9 +12,10 @@
 		</div>
 	</div>
 	<div class="actions">
-		<span class="remove-notification material-icons">
+		<span class="remove-notification material-icons" title="close">
 			close
 		</span>
 		__message??this::./expand-more__
+		__cancelable??this::./cancel-button__
 	</div>
 </div>

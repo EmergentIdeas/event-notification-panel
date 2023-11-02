@@ -14,6 +14,11 @@ export default function(app) {
 	// for project specific templates than it is a useful library.
 	loadTemplates()
 	
+	// webhandle.routers.preStatic.get("/js/pages.js", (req, res, next) => {
+	// 	setTimeout(() => {
+	// 		next()
+	// 	}, 60000)
+	// })
 	webhandle.routers.preStatic.get(/.*\.cjs$/, (req, res, next) => {
 		console.log('cjs')
 		res.set('Content-Type', "application/javascript")

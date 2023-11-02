@@ -1,13 +1,14 @@
 {
-	"name": "event-notification-panel",
+	"name": "@webhandle/event-notification-panel",
 	"version": "1.0.0",
 	"description": "",
-	"main": "client-js/index.js",
+	"main": "server-js/webhandle-env-setup.mjs",
+	"browser": "client-js/index.mjs",
 	"scripts": {
 		"test": "node_modules/mocha/bin/mocha",
-		"less-build": "npx lessc --source-map --source-map-include-source less/pages.less public/css/pages.css",
+		"less-build": "npx lessc --source-map --source-map-include-source less/pages.less public/css/pages.css; npx lessc --source-map --source-map-include-source less/components.less public/css/event-notification-panel.css",
 		"less-compress": "npx uglifycss public/css/pages.css > public/css/pages.min.css",
-		"client-js-build": "npx webpack --config pages.webpack.cjs",
+		"client-js-build": "npx webpack --config all.webpack.cjs",
 		"client-js-compress": "npx uglifyjs public/js/pages.cjs -o public/js/pages.min.cjs -c --source-map url=public/js/pages.min.cjs.map",
 		"client-js-browserify-build": "npm run client-js-pages-browserify-build",
 		"client-js-pages-browserify build": "npx browserify client-js/pages.cjs --debug | npx exorcist public/js/pages.cjs.map > public/js/pages.cjs",
@@ -54,9 +55,14 @@
 		]
 	},
 	"files": [
-		"/client-js/index.js",
+		"/client-js",
+		"/server-js/webhandle-env-setup.mjs",
 		"/less/components.less",
-		"/public"
+		"/public/css/event-notification-panel.*",
+		"/public/js/event-notification-panel.*",
+		"/views/@webhandle",
+		"/views/*.js",
+		"README.md"
 	],
 	"type": "module"
 }

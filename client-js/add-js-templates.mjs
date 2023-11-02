@@ -23,7 +23,7 @@ export default function addJsTemplates() {
 			if(!status) {
 				return status
 			}
-			return icons.unknown
+			return icons.info
 		})
 	}
 

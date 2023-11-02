@@ -1,12 +1,14 @@
 import { View } from '@webhandle/backbone-view'
-import { simpleMessage, progressMessage } from "../views/load-browser-views.js"
+import { simpleMessage, progressMessage, cancelMask } from "../views/load-browser-views.js"
 import EventEmitter from '@webhandle/minimal-browser-event-emitter'
-import NotificationStatus from "./notification-status.js"
+import NotificationStatus from "./notification-status.mjs"
+import init from './init.mjs'
 
+init()
 
 /**
- * @property {EventTarget} emitter Fires events on notification lifecycle and can trigger
- * rerendering. Events sent are: initialize, nodeAdd, render, expandMessage, startRemove, remove
+ * @property {EventTarget} notification Fires events on notification lifecycle and can trigger
+ * rerendering. Events sent are: initialize, nodeAdd, render, expandMessage, cancel, startRemove, remove
  * It listens for the events: modelUpdate
  */
 export default class EventNotificationView extends View {
@@ -25,18 +27,25 @@ export default class EventNotificationView extends View {
 	preinitialize() {
 		this.events = {
 			'click .expand-message': 'expandMessage',
+			'click .cancel-operation': 'cancelOperation',
 			'click .remove-notification': 'removeSlowly'
 		}
 		this.className = 'event-notification-view'
-		this.emitter = new EventEmitter()
-		this.emitter.on('modelUpdate', this.modelUpdate.bind(this))
+		this.notification = new EventEmitter()
+		this.notification.on('modelUpdate', this.modelUpdate.bind(this))
+		
+		/**
+		 * The time by which we can assume that some failure occurred and
+		 * this event will not be added.
+		 */
+		this.failToAddTime = 10000
 	}
 
 	initialize() {
 		if (this.closed) {
 			this.el.classList.add('closed')
 		}
-		this.emitter.emit('initialize', this)
+		this.notification.emit('initialize', this)
 		if(this._isComplete()) {
 			// We only want to set up ttl if we're complete
 			this._setupWatchNodeInsertion()
@@ -65,12 +74,19 @@ export default class EventNotificationView extends View {
 		return this.model.progressComplete !== null && this.model.progressComplete !== undefined
 	}
 	
+	/**
+	 * 
+	 * This is a big mess to listen for the add event for this.el
+	 * We need to know when the event is added to be able to remove
+	 * it after the ttl. It might be possible just to assume that the creation
+	 * time represents the add time, and that's what I'll do if this is
+	 * a performance drag. 
+	 * 
+	 * If not found to be added after 10 seconds, we'll clean up the observer
+	 * so as not to leak memory and computation.
+	 */
 	_setupWatchNodeInsertion() {
-		// This is a big mess to listen for the add event for this.el
-		// We need to know when the event is added to be able to remove
-		// it after the ttl. It might be possible just to assume that the creation
-		// time represents the add time, and that's what I'll do if this is
-		// a performance drag. 
+		let disconnected = false
 		const config = { attributes: false, childList: true, subtree: true };
 		const observer = new MutationObserver((mutationList, observer) => {
 			let found = false
@@ -86,7 +102,8 @@ export default class EventNotificationView extends View {
 			}
 			if (found) {
 				observer.disconnect()
-				this.emitter.emit('nodeAdd', this)
+				disconnected = true
+				this.notification.emit('nodeAdd', this)
 				if(this.ttl) {
 					setTimeout(() => {
 						this.removeSlowly()
@@ -95,7 +112,13 @@ export default class EventNotificationView extends View {
 			}
 		})
 		observer.observe(document.body, config)
-
+		
+		setTimeout(() => {
+			if(!disconnected) {
+				observer.disconnect()
+				disconnected = true
+			}
+		}, this.failToAddTime)	
 	}
 
 	render() {
@@ -108,25 +131,43 @@ export default class EventNotificationView extends View {
 		}
 
 		this.el.innerHTML = templ(this.model)
-		this.emitter.emit('render', this)
+		this.notification.emit('render', this)
 		return this
 	}
 
+	/**
+	 * Show the additional information message.
+	 */
 	expandMessage() {
 		this.el.classList.remove('closed')
-		this.emitter.emit('expandMessage', this)
+		this.notification.emit('expandMessage', this)
 	}
 
+	/**
+	 * Emit a 'cancel' event, add a mask that indicates it's being canceled
+	 * and remove the cancel button
+	 */
+	cancelOperation() {
+		this.notification.emit('cancel', this)
+		this.el.querySelector('.notification').insertAdjacentHTML('beforeend', cancelMask())
+		this.el.querySelector('.cancel-operation').remove()
+	}
+	
+	remove() {
+		if(this.el.parentElement) {
+			this.notification.emit('remove', this)
+			super.remove()
+		}
+	}
+
+	/**
+	 * Transition the notification to zero opacity and then remove
+	 */
 	removeSlowly() {
-		this.emitter.emit('startRemove', this)
+		this.notification.emit('startRemove', this)
 		addEventListener("transitionend", (event) => {
-			if(this.el.parentElement) {
-				this.remove()
-				this.emitter.emit('remove', this)
-			}
+			this.remove()
 		})
 		this.el.style.opacity = 0
 	}
-
-
 }
