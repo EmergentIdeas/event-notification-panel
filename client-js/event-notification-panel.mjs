@@ -14,6 +14,9 @@ export default class EventNotificationPanel extends View {
 		return this
 	}
 	
+	/**
+	 * Remove the markup for all notifications
+	 */
 	removeAllNotifications() {
 		this.el.innerHTML = ''
 	}
